@@ -48,13 +48,13 @@ espejar :: Dibujo a -> Dibujo a
 espejar = Espejar
 
 (^^^) :: Dibujo a -> Dibujo a -> Dibujo a
-(^^^) d1 d2 = encimar d1 d2
+(^^^)  = encimar 
 
 (.-.) :: Dibujo a -> Dibujo a -> Dibujo a
-(.-.) d1 d2 = apilar  1 1 d1 d2 
+(.-.)  = apilar  1 1  
 
 (///) :: Dibujo a -> Dibujo a -> Dibujo a
-(///) d1 d2 = juntar 1 1 d1 d2
+(///)  = juntar 1 1 
 
 -- rotaciones
 r90 :: Dibujo a -> Dibujo a
@@ -82,6 +82,9 @@ ciclar d = cuarteto d d1 d2 d3
                 d3 = r270 d
 
 -- map para nuestro lenguaje
+-- verificar que las operaciones satisfagan
+-- 1. map figura = id
+-- 2. map (g . f) = mapDib g . mapDib f
 mapDib :: (a -> b) -> Dibujo a -> Dibujo b
 mapDib f (Basica a)         = Basica (f a)
 mapDib f (Rotar d)          = Rotar (mapDib f d) 
@@ -90,13 +93,11 @@ mapDib f (Rot45 d)          = Rot45 (mapDib f d)
 mapDib f (Apilar n m d1 d2) = Apilar n m (mapDib f d1) (mapDib f d2)
 mapDib f (Juntar n m d1 d2) = Juntar n m (mapDib f d1) (mapDib f d2)
 mapDib f (Encimar d1 d2)    = Encimar (mapDib f d1) (mapDib f d2) 
--- verificar que las operaciones satisfagan
--- 1. map figura = id
--- 2. map (g . f) = mapDib g . mapDib f
+
 
 -- Cambiar todas las básicas de acuerdo a la función.
 change :: (a -> Dibujo b) -> Dibujo a -> Dibujo b
-change f (Basica c)         = f c 
+change f (Basica a)         = f a 
 change f (Rotar d)          = Rotar (change f d) 
 change f (Espejar d)        = Espejar (change f d)
 change f (Rot45 d)          = Rot45 (change f d)
@@ -115,4 +116,10 @@ foldDib ::
   (b -> b -> b) ->
   Dibujo a ->
   b
-foldDib = undefined
+foldDib bas _ _ _ _ _ _ (Basica a) =  bas a
+foldDib bas rotar' espejar' rot45' apilar' juntar' encimar' (Rotar dib)  = rotar' (foldDib bas rotar' espejar' rot45' apilar' juntar' encimar' dib)
+foldDib bas rotar' espejar' rot45' apilar' juntar' encimar' (Espejar dib) = espejar' (foldDib bas rotar' espejar' rot45' apilar' juntar' encimar' dib)
+foldDib bas rotar' espejar' rot45' apilar' juntar' encimar' (Rot45 dib) = rot45' (foldDib bas rotar' espejar' rot45' apilar' juntar' encimar' dib)
+foldDib bas rotar' espejar' rot45' apilar' juntar' encimar' (Apilar n m  d1 d2) = apilar' n m (foldDib bas rotar' espejar' rot45' apilar' juntar' encimar' d1) (foldDib bas rotar' espejar' rot45' apilar' juntar' encimar' d2)
+foldDib bas rotar' espejar' rot45' apilar' juntar' encimar' (Juntar n m  d1 d2) = juntar' n m (foldDib bas rotar' espejar' rot45' apilar' juntar' encimar' d1) (foldDib bas rotar' espejar' rot45' apilar' juntar' encimar' d2)
+foldDib bas rotar' espejar' rot45' apilar' juntar' encimar' (Encimar d1 d2) = encimar' (foldDib bas rotar' espejar' rot45' apilar' juntar' encimar' d1) (foldDib bas rotar' espejar' rot45' apilar' juntar' encimar' d2)
