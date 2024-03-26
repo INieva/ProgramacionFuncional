@@ -2,16 +2,21 @@ module Pred (
   Pred,
   cambiar, anyDib, allDib, orP, andP, falla
 ) where
+import Dibujo (foldDib, Dibujo, change, figura)
+import GHC.GHCi.Helpers (disableBuffering)
 
 type Pred a = a -> Bool
 
 -- Dado un predicado sobre básicas, cambiar todas las que satisfacen
 -- el predicado por la figura básica indicada por el segundo argumento.
-cambiar = undefined
-
+cambiar :: Pred a -> (a -> Dibujo a) -> Dibujo a -> Dibujo a
+cambiar pred fun  = change pred'
+                  where pred' n = if pred n then fun n else figura n 
 
 -- Alguna básica satisface el predicado.
-anyDib = undefined
+anyDib :: Pred a -> Dibujo a -> Bool
+anyDib pred = foldDib pred id id id ordFold ordFold (||)
+              where ordFold _ _  = (||)  
 
 -- Todas las básicas satisfacen el predicado.
 allDib = undefined
@@ -23,3 +28,5 @@ andP = undefined
 orP = undefined
 
 falla = True
+
+
