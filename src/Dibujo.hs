@@ -1,4 +1,4 @@
-module Dibujo (Dibujo, figura, rotar, espejar, 
+module Dibujo (Dibujo, figura, rotar, espejar,apilar, 
               rot45, juntar, encimar, r180, r270,r90,
               (///), (^^^), (.-.), encimar4, ciclar,
               cuarteto, mapDib, foldDib,change

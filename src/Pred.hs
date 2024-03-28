@@ -15,12 +15,12 @@ cambiar p f  = change fun
 
 -- Alguna básica satisface el predicado.
 anyDib :: Pred a -> Dibujo a -> Bool
-anyDib pred = foldDib pred id id id ordFold ordFold (||)
+anyDib p = foldDib p id id id ordFold ordFold (||)
               where ordFold _ _  = (||)  
 
 -- Todas las básicas satisfacen el predicado.
 allDib :: Pred a -> Dibujo a -> Bool
-allDib pred = foldDib pred id id id andFold andFold (&&)
+allDib p = foldDib p id id id andFold andFold (&&)
               where andFold _ _ = (&&)
 
 -- Los dos predicados se cumplen para el elemento recibido.

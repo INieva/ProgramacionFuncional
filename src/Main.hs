@@ -13,7 +13,7 @@ import InterpSVG (ConfSVG, initialSVG', simpleSVG)
 
 -- Lista de configuraciones de los dibujos
 configs :: [Conf]
-configs = [ejemploConf, feoConf,cuadConf 3]
+configs = [ejemploConf, feoConf,cuadConf ]
 
 configsH :: [ConfH]
 configsH = map (\(Conf n p _) -> simpleHaha n p) configs
